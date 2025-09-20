@@ -11,6 +11,7 @@ namespace Femyou.Internal
     {
       fmi3InstantiateBasicCoSimulation = FmuLibrary.LoadFunction<FMI3.fmi3InstantiateBasicCoSimulationTYPE>(nameof(fmi3InstantiateBasicCoSimulation));
       fmi3FreeInstance = FmuLibrary.LoadFunction<FMI3.fmi3FreeInstanceTYPE>(nameof(fmi3FreeInstance));
+      fmi3Reset = FmuLibrary.LoadFunction<FMI3.fmi3ResetTYPE>(nameof(fmi3Reset)); 
       fmi3EnterInitializationMode = FmuLibrary.LoadFunction<FMI3.fmi3EnterInitializationModeTYPE>(nameof(fmi3EnterInitializationMode));
       fmi3ExitInitializationMode = FmuLibrary.LoadFunction<FMI3.fmi3ExitInitializationModeTYPE>(nameof(fmi3ExitInitializationMode));
       fmi3EnterStepMode = FmuLibrary.LoadFunction<FMI3.fmi3EnterStepModeTYPE>(nameof(fmi3EnterStepMode));
@@ -30,6 +31,7 @@ namespace Femyou.Internal
     // ReSharper disable InconsistentNaming -- must use fmi standard names to load function in library
     private readonly FMI3.fmi3InstantiateBasicCoSimulationTYPE fmi3InstantiateBasicCoSimulation;
     private readonly FMI3.fmi3FreeInstanceTYPE fmi3FreeInstance;
+    private readonly FMI3.fmi3ResetTYPE fmi3Reset;
     private readonly FMI3.fmi3EnterInitializationModeTYPE fmi3EnterInitializationMode;
     private readonly FMI3.fmi3ExitInitializationModeTYPE fmi3ExitInitializationMode;
     private readonly FMI3.fmi3EnterStepModeTYPE fmi3EnterStepMode;
@@ -78,6 +80,10 @@ namespace Femyou.Internal
       fmi3ExitInitializationMode(handle);
     }
 
+    public override void Reset(IntPtr handle)
+    {
+      throw new NotImplementedException("Reset not implemented for FMI 3.0 by VS");
+    }
     public override void Step(IntPtr handle, double currentTime, double step)
     {
       fmi3DoStep(
@@ -85,8 +91,8 @@ namespace Femyou.Internal
         currentTime,
         step,
         FMI3.fmi3Boolean.fmi3True,
-        IntPtr.Zero, 
-        IntPtr.Zero, 
+        IntPtr.Zero,
+        IntPtr.Zero,
         IntPtr.Zero
       );
     }
@@ -184,5 +190,10 @@ namespace Femyou.Internal
       if (status != 0)
         throw new FmuException("Failed to write");
     }
-  }
+
+        public override void SetTime(IntPtr handle, double time)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

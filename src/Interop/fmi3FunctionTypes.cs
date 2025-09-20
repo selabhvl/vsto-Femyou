@@ -43,6 +43,7 @@ namespace Femyou.Interop
 
     public delegate void fmi3FreeInstanceTYPE(fmi3Instance c);
 
+    public delegate void fmi3ResetTYPE(fmi3Instance c);
     /* Enter and exit initialization mode, terminate and reset */
 
     public delegate fmi3Status fmi3EnterInitializationModeTYPE(fmi3Instance instance,

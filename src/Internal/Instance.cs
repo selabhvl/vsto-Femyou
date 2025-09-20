@@ -46,6 +46,16 @@ namespace Femyou.Internal
       CurrentTime += step;
     }
 
+    public void SetTime(double time)
+    {
+      _library.SetTime(_handle, time);
+      CurrentTime = time;
+    }
+
+    public void Reset()
+    {
+      _library.Reset(_handle);
+    }
     public IEnumerable<double> ReadReal(IEnumerable<IVariable> variables) =>
       _library.ReadReal(_handle, variables);
 

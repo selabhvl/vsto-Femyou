@@ -10,6 +10,7 @@ namespace Femyou.Internal
     public Library2(string path) : base(path)
     {
       fmi2Instantiate = FmuLibrary.LoadFunction<FMI2.fmi2InstantiateTYPE>(nameof(fmi2Instantiate));
+      fmi2Reset = FmuLibrary.LoadFunction<FMI2.fmi2ResetTYPE>(nameof(fmi2Reset));
       fmi2FreeInstance = FmuLibrary.LoadFunction<FMI2.fmi2FreeInstanceTYPE>(nameof(fmi2FreeInstance));
       fmi2SetupExperiment = FmuLibrary.LoadFunction<FMI2.fmi2SetupExperimentTYPE>(nameof(fmi2SetupExperiment));
       fmi2EnterInitializationMode = FmuLibrary.LoadFunction<FMI2.fmi2EnterInitializationModeTYPE>(nameof(fmi2EnterInitializationMode));
@@ -25,10 +26,12 @@ namespace Femyou.Internal
       fmi2SetInteger = FmuLibrary.LoadFunction<FMI2.fmi2SetIntegerTYPE>(nameof(fmi2SetInteger));
       fmi2SetBoolean = FmuLibrary.LoadFunction<FMI2.fmi2SetBooleanTYPE>(nameof(fmi2SetBoolean));
       fmi2SetString = FmuLibrary.LoadFunction<FMI2.fmi2SetStringTYPE>(nameof(fmi2SetString));
+      fmi2SetTime = FmuLibrary.LoadFunction<FMI2.fmi2SetTimeTYPE>(nameof(fmi2SetTime));
     }
 
     // ReSharper disable InconsistentNaming -- must use fmi standard names to load function in library
     private readonly FMI2.fmi2InstantiateTYPE fmi2Instantiate;
+    private readonly FMI2.fmi2ResetTYPE fmi2Reset;
     private readonly FMI2.fmi2FreeInstanceTYPE fmi2FreeInstance;
     private readonly FMI2.fmi2SetupExperimentTYPE fmi2SetupExperiment;
     private readonly FMI2.fmi2EnterInitializationModeTYPE fmi2EnterInitializationMode;
@@ -42,6 +45,7 @@ namespace Femyou.Internal
     private readonly FMI2.fmi2SetIntegerTYPE fmi2SetInteger;
     private readonly FMI2.fmi2SetBooleanTYPE fmi2SetBoolean;
     private readonly FMI2.fmi2SetStringTYPE fmi2SetString;
+    private readonly FMI2.fmi2SetTimeTYPE fmi2SetTime;
     private readonly FMI2.fmi2DoStepTYPE fmi2DoStep;
 
     public override Callbacks CreateCallbacks(Instance instance, ICallbacks cb) => 
@@ -58,6 +62,14 @@ namespace Femyou.Internal
         FMI2.fmi2Boolean.fmi2False
       );
 
+    public override void Reset(IntPtr handle)
+    {
+      var result = fmi2Reset(handle);
+      if (result != 0)
+        throw new FmuException($"Failed to reset: {result}");
+      // fmi2EnterInitializationMode(handle);
+      // fmi2ExitInitializationMode(handle);
+    }
     public override void Setup(IntPtr handle, double currentTime)
     {
       fmi2SetupExperiment(
@@ -79,6 +91,11 @@ namespace Femyou.Internal
         step,
         FMI2.fmi2Boolean.fmi2True
       );
+
+      public override void SetTime(IntPtr handle, double time)
+        {
+            fmi2SetTime(handle, time);
+        }
 
     public override void Shutdown(IntPtr handle, bool started)
     {
@@ -174,5 +191,5 @@ namespace Femyou.Internal
         throw new FmuException("Failed to write");
     }
 
-  }
+    }
 }

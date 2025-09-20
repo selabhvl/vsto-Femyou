@@ -77,6 +77,7 @@ namespace Femyou.Interop
       fmi2Boolean loggingOn
     );
 
+    public delegate fmi2Status fmi2ResetTYPE(fmi2Component c);
     public delegate void fmi2FreeInstanceTYPE(fmi2Component c);
 
     /* Enter and exit initialization mode, terminate and reset */
@@ -101,7 +102,7 @@ namespace Femyou.Interop
     public delegate fmi2Status fmi2SetIntegerTYPE(fmi2Component c, fmi2ValueReference[] vr, size_t nvr, fmi2Integer[] value);
     public delegate fmi2Status fmi2SetBooleanTYPE(fmi2Component c, fmi2ValueReference[] vr, size_t nvr, fmi2Boolean[] value);
     public delegate fmi2Status fmi2SetStringTYPE(fmi2Component c, fmi2ValueReference[] vr, size_t nvr, [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr)] fmi2String[] value);
-
+    public delegate fmi2Status fmi2SetTimeTYPE(fmi2Component c, fmi2Real time);
 
     /***************************************************
       Types for Functions for FMI2 for Co-Simulation

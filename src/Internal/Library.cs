@@ -22,6 +22,8 @@ namespace Femyou.Internal
     public abstract void Setup(IntPtr handle, double currentTime);
     public abstract void Step(IntPtr handle, double currentTime, double step);
     public abstract void Shutdown(IntPtr handle, bool started);
+    public abstract void Reset(IntPtr handle);
+    public abstract void SetTime(IntPtr handle, System.Double time);
     
     public abstract IEnumerable<double> ReadReal(IntPtr handle, IEnumerable<IVariable> variables);
     public abstract IEnumerable<int> ReadInteger(IntPtr handle, IEnumerable<IVariable> variables);

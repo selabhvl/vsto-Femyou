@@ -17,6 +17,9 @@ namespace Femyou
     double CurrentTime { get; }
     void StartTime(double time);
     void AdvanceTime(double time);
+    void SetTime(double time);
+    void Reset();
+
   }
 
   public static class ExtensionsIInstance

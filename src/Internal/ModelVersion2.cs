@@ -23,6 +23,7 @@ namespace Femyou.Internal
       {
         Architecture.X86 => "32",
         Architecture.X64 => "64",
+        Architecture.Arm64 => "64",
         _ => throw new FmuException($"Unsupported architecture {architecture}"),
       };
   }
