@@ -9,12 +9,11 @@ namespace Femyou.Internal
 {
   public class ModelImpl : IModel
   {
-    public ModelImpl(string fmuPath)
+    public ModelImpl(string tmpFolder)
     {
       try
       {
-        TmpFolder = Path.Combine(Path.GetTempPath(),nameof(Femyou),Path.GetFileName(fmuPath));
-        ZipFile.ExtractToDirectory(fmuPath, TmpFolder, true);
+        TmpFolder = tmpFolder;
         var modelDescription = XDocument.Load(Path.Combine(TmpFolder,"modelDescription.xml"));
         var root = modelDescription.Root;
         Variables = root
@@ -36,7 +35,7 @@ namespace Femyou.Internal
       }
       catch (Exception e)
       {
-        throw new FmuException("Failed to load model description", e);
+        throw new FmuException($"Failed to load model description (folder: {TmpFolder})", e);
       }
     }
 
