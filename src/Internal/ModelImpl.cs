@@ -11,10 +11,12 @@ namespace Femyou.Internal
   {
     public ModelImpl(string tmpFolder)
     {
+      var res = System.Runtime.InteropServices.RuntimeInformation.OSArchitecture;
+      var res2 = System.Runtime.InteropServices.RuntimeInformation.OSDescription;
       try
       {
         TmpFolder = tmpFolder;
-        var modelDescription = XDocument.Load(Path.Combine(TmpFolder,"modelDescription.xml"));
+        var modelDescription = XDocument.Load(Path.Combine(TmpFolder, "modelDescription.xml"));
         var root = modelDescription.Root;
         Variables = root
           !.Element("ModelVariables")
@@ -22,7 +24,7 @@ namespace Femyou.Internal
           .Select(sv => new Variable(sv) as IVariable)
           .ToDictionary(sv => sv.Name, sv => sv);
         var fmiVersion = root!.Attribute("fmiVersion")?.Value;
-        ModelVersion = fmiVersion!.StartsWith("2.") ? (IModelVersion) new ModelVersion2() : new ModelVersion3();
+        ModelVersion = fmiVersion!.StartsWith("2.") ? (IModelVersion)new ModelVersion2() : new ModelVersion3();
         var coSimulationId = root
           !.Element(ModelVersion.CoSimulationElementName)
           !.Attribute("modelIdentifier")
