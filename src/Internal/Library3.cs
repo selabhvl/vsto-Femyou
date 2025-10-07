@@ -13,7 +13,7 @@ namespace Femyou.Internal
     {
       fmi3InstantiateCoSimulation = FmuLibrary.LoadFunction<FMI3.fmi3InstantiateCoSimulationTYPE>(nameof(fmi3InstantiateCoSimulation));
       fmi3FreeInstance = FmuLibrary.LoadFunction<FMI3.fmi3FreeInstanceTYPE>(nameof(fmi3FreeInstance));
-      fmi3Reset = FmuLibrary.LoadFunction<FMI3.fmi3ResetTYPE>(nameof(fmi3Reset)); 
+      fmi3Reset = FmuLibrary.LoadFunction<FMI3.fmi3ResetTYPE>(nameof(fmi3Reset));
       fmi3EnterInitializationMode = FmuLibrary.LoadFunction<FMI3.fmi3EnterInitializationModeTYPE>(nameof(fmi3EnterInitializationMode));
       fmi3ExitInitializationMode = FmuLibrary.LoadFunction<FMI3.fmi3ExitInitializationModeTYPE>(nameof(fmi3ExitInitializationMode));
       fmi3EnterStepMode = FmuLibrary.LoadFunction<FMI3.fmi3EnterStepModeTYPE>(nameof(fmi3EnterStepMode));
@@ -48,10 +48,10 @@ namespace Femyou.Internal
     private readonly FMI3.fmi3SetInt32TYPE fmi3SetInt32;
     private readonly FMI3.fmi3SetBooleanTYPE fmi3SetBoolean;
     private readonly FMI3.fmi3SetStringTYPE fmi3SetString;
-    
-    public override Callbacks CreateCallbacks(Instance instance, ICallbacks cb) => 
+
+    public override Callbacks CreateCallbacks(Instance instance, ICallbacks cb) =>
       new Callbacks3(instance, cb);
-    
+
     public override IntPtr Instantiate(string name, string guid, string tmpFolder, Callbacks callbacks)
     {
       return fmi3InstantiateCoSimulation(
@@ -64,7 +64,7 @@ namespace Femyou.Internal
         FMI3.fmi3Boolean.fmi3False,
         IntPtr.Zero,
         0,
-        IntPtr.Zero, //callbacks.Custom,
+        callbacks.Custom,
         ((Callbacks3)callbacks).LogMessageDelegate,
         IntPtr.Zero
       );
@@ -96,9 +96,9 @@ namespace Femyou.Internal
         step,
         FMI3.fmi3Boolean.fmi3True,
         buf,
-        buf+sizeof(bool),
-        buf+2*sizeof(bool),
-        buf+3*sizeof(bool)
+        buf + sizeof(bool),
+        buf + 2 * sizeof(bool),
+        buf + 3 * sizeof(bool)
       );
       if (res != 0) { throw new FmuException("Status not OK: " + res); }
     }
@@ -145,7 +145,7 @@ namespace Femyou.Internal
     private T[] Read<T>(
       IntPtr handle,
       IEnumerable<IVariable> variables,
-      Func<int,T[]> createArray,
+      Func<int, T[]> createArray,
       Func<IntPtr, UInt32[], ulong, T[], ulong, int> call
       )
     {
@@ -197,9 +197,9 @@ namespace Femyou.Internal
         throw new FmuException("Failed to write");
     }
 
-        public override void SetTime(IntPtr handle, double time)
-        {
-            throw new NotImplementedException();
-        }
+    public override void SetTime(IntPtr handle, double time)
+    {
+      throw new NotImplementedException();
     }
+  }
 }
