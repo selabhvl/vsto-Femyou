@@ -56,7 +56,7 @@ namespace Femyou.Internal
         name,
         FMI2.fmi2Type.fmi2CoSimulation,
         guid,
-        tmpFolder,
+        "file://"+tmpFolder,
         callbacks.Custom,
         FMI2.fmi2Boolean.fmi2False,
         FMI2.fmi2Boolean.fmi2False
