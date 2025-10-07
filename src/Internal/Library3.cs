@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.InteropServices;
 using Femyou.Interop;
 
 namespace Femyou.Internal
@@ -62,7 +60,7 @@ namespace Femyou.Internal
         FMI3.fmi3Boolean.fmi3False,
         IntPtr.Zero,
         0,
-        IntPtr.Zero, //callbacks.Custom,
+        callbacks.Custom,
         ((Callbacks3)callbacks).LogMessageDelegate,
         IntPtr.Zero
       );
