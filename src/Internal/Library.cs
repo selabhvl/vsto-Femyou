@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using NativeLibraryLoader;
 
 namespace Femyou.Internal
@@ -8,10 +9,11 @@ namespace Femyou.Internal
   {
     public Library(string path)
     {
-      FmuLibrary = new NativeLibrary(path);
+      var s = System.Runtime.InteropServices.NativeLibrary.Load(path);
+      FmuLibrary = new NativeLibraryLoader.NativeLibrary(path);
     }
 
-    protected readonly NativeLibrary FmuLibrary;
+    protected readonly NativeLibraryLoader.NativeLibrary FmuLibrary;
     public void Dispose()
     {
       FmuLibrary.Dispose();
