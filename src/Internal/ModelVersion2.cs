@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 
@@ -16,7 +17,15 @@ namespace Femyou.Internal
         _ => throw new FmuException($"Unsupported operating system {platform}"),
       };
 
-    public Library Load(string path) => new Library2(path);
+    public Library Load(string path) {
+      // We're adding a bit more context here to distinguish having an .so for the wrong arch.
+      Debug.Assert(File.Exists(path), $"File does not exist: {path}");
+      try {
+          return new Library2(path);
+      } catch (FileNotFoundException e) {
+          throw new FmuException("File exists but couldn't load native library", e);
+      }
+    }
 
     private string MapArchitecture(Architecture architecture) =>
       architecture switch
