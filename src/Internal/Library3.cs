@@ -1,16 +1,19 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using Femyou.Interop;
+using static Femyou.IModel;
 
 namespace Femyou.Internal
 {
   class Library3 : Library
   {
-    public Library3(string path) : base(path)
+    public Library3(string path, Collection<UnsupportedFunctions> unsupportedFunctions) : base(path)
     {
+      // TODO: handle unsupported functions
       fmi3InstantiateCoSimulation = FmuLibrary.LoadFunction<FMI3.fmi3InstantiateCoSimulationTYPE>(nameof(fmi3InstantiateCoSimulation));
       fmi3FreeInstance = FmuLibrary.LoadFunction<FMI3.fmi3FreeInstanceTYPE>(nameof(fmi3FreeInstance));
       fmi3Reset = FmuLibrary.LoadFunction<FMI3.fmi3ResetTYPE>(nameof(fmi3Reset));

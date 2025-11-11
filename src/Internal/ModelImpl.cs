@@ -1,15 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
-using System.IO.Compression;
 using System.Linq;
 using System.Xml.Linq;
+using static Femyou.IModel;
 
 namespace Femyou.Internal
 {
   public class ModelImpl : IModel
   {
-    public ModelImpl(string tmpFolder)
+    public ModelImpl(string tmpFolder, Collection<UnsupportedFunctions> supportedFunctions)
     {
       try
       {
@@ -28,7 +29,7 @@ namespace Femyou.Internal
           !.Attribute("modelIdentifier")
           !.Value;
         var libPath = GetLibPath(ModelVersion, coSimulationId);
-        _library = ModelVersion.Load(libPath);
+        _library = ModelVersion.Load(libPath, supportedFunctions);
         Name = root!.Attribute("modelName")!.Value;
         Description = root?.Attribute("description")?.Value;
         Guid = root!.Attribute(ModelVersion.GuidAttributeName)!.Value;

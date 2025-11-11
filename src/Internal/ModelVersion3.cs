@@ -1,6 +1,8 @@
 using System;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Runtime.InteropServices;
+using static Femyou.IModel;
 
 namespace Femyou.Internal
 {
@@ -8,7 +10,8 @@ namespace Femyou.Internal
   {
     public string CoSimulationElementName { get; } = "CoSimulation";
     public string GuidAttributeName { get; } = "instantiationToken";
-    public Library Load(string path) => new Library3(path);
+    public Library Load(string path) => new Library3(path, new Collection<UnsupportedFunctions>([]));
+    public Library Load(string path, Collection<UnsupportedFunctions> unsupportedFunctions) => new Library3(path, unsupportedFunctions);
     
     public string RelativePath(string name, Architecture architecture, PlatformID platform) =>
       platform switch

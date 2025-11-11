@@ -1,13 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Femyou.Interop;
+using static Femyou.IModel;
 
 namespace Femyou.Internal
 {
   class Library2 : Library
   {
-    public Library2(string path) : base(path)
+    public Library2(string path, Collection<UnsupportedFunctions> supportedFunctions) : base(path)
     {
       fmi2Instantiate = FmuLibrary.LoadFunction<FMI2.fmi2InstantiateTYPE>(nameof(fmi2Instantiate));
       fmi2Reset = FmuLibrary.LoadFunction<FMI2.fmi2ResetTYPE>(nameof(fmi2Reset));
@@ -26,8 +28,9 @@ namespace Femyou.Internal
       fmi2SetInteger = FmuLibrary.LoadFunction<FMI2.fmi2SetIntegerTYPE>(nameof(fmi2SetInteger));
       fmi2SetBoolean = FmuLibrary.LoadFunction<FMI2.fmi2SetBooleanTYPE>(nameof(fmi2SetBoolean));
       fmi2SetString = FmuLibrary.LoadFunction<FMI2.fmi2SetStringTYPE>(nameof(fmi2SetString));
-      fmi2SetTime = FmuLibrary.LoadFunction<FMI2.fmi2SetTimeTYPE>(nameof(fmi2SetTime));
+      fmi2SetTime = supportedFunctions.Contains(UnsupportedFunctions.SetTime2) ? null : FmuLibrary.LoadFunction<FMI2.fmi2SetTimeTYPE>(nameof(fmi2SetTime));
     }
+
 
     // ReSharper disable InconsistentNaming -- must use fmi standard names to load function in library
     private readonly FMI2.fmi2InstantiateTYPE fmi2Instantiate;
@@ -94,6 +97,8 @@ namespace Femyou.Internal
 
       public override void SetTime(IntPtr handle, double time)
         {
+            if (fmi2SetTime == null)
+                throw new FmuException("SetTime function is not supported.");
             fmi2SetTime(handle, time);
         }
 

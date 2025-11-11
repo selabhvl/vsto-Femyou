@@ -1,7 +1,9 @@
 using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
+using static Femyou.IModel;
 
 namespace Femyou.Internal
 {
@@ -17,13 +19,18 @@ namespace Femyou.Internal
         _ => throw new FmuException($"Unsupported operating system {platform}"),
       };
 
-    public Library Load(string path) {
+    public Library Load(string path) { return Load(path, new Collection<UnsupportedFunctions>([])); }
+    public Library Load(string path, Collection<UnsupportedFunctions> unsupportedFunctions)
+    {
       // We're adding a bit more context here to distinguish having an .so for the wrong arch.
       Debug.Assert(File.Exists(path), $"File does not exist: {path}");
-      try {
-          return new Library2(path);
-      } catch (FileNotFoundException e) {
-          throw new FmuException("File exists but couldn't load native library", e);
+      try
+      {
+        return new Library2(path, unsupportedFunctions);
+      }
+      catch (FileNotFoundException e)
+      {
+        throw new FmuException("File exists but couldn't load native library", e);
       }
     }
 

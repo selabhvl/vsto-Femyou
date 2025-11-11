@@ -5,6 +5,7 @@ namespace Femyou
 {
   public interface IModel : IDisposable
   {
+    enum UnsupportedFunctions { SetTime2 };
     string Name { get; }
     string Description { get; }
     IReadOnlyDictionary<string,IVariable> Variables { get; }
