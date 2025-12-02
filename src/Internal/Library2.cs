@@ -59,7 +59,7 @@ namespace Femyou.Internal
         name,
         FMI2.fmi2Type.fmi2CoSimulation,
         guid,
-        "file://"+tmpFolder,
+        "file://"+tmpFolder+"/resources", // [VS] XXX Should be servicable from the outside...
         callbacks.Custom,
         FMI2.fmi2Boolean.fmi2False,
         FMI2.fmi2Boolean.fmi2False
